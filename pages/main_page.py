@@ -17,7 +17,7 @@ class MainPage:
 
     def scroll_to_faq_section(self):
         faq_element = self.driver.find_element(*MainPageLocators.FAQ_QUESTION_BUTTONS)
-        self.driver.execute_script('arguments[0].scrollIntoView();', faq_element)
+        self.driver.execute_script('arguments[0].scrollIntoView({block: "center"});', faq_element)
 
     def click_to_question(self, index):
         self.driver.find_elements(*MainPageLocators.FAQ_QUESTION_BUTTONS)[index].click()
@@ -31,6 +31,7 @@ class MainPage:
         return actual_text
 
     def open_faq_answer(self, index):
+        self.click_cookie_consent_button()
         self.scroll_to_faq_section()
         self.click_to_question(index)
         self.wait_for_answer_to_appear(index)
