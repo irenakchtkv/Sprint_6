@@ -45,6 +45,7 @@ class MainPage(BasePage):
         self.wait_for_url_to_be(urls.MAIN_URL)
 
     def go_to_main_scooter_page(self):
+        self.open_main_scooter_page()
         self.click_scooter_logo()
         self.wait_for_load_main_scooter_page()
         return self.get_current_url()
@@ -63,6 +64,7 @@ class MainPage(BasePage):
         self.wait_for_url_contains_path(urls.DZEN_DOMAIN)
 
     def go_to_dzen_new_tab(self):
+        self.open_main_scooter_page()
         self.click_yandex_logo()
         self.wait_for_new_tab_to_appear()
         self.switch_to_new_tab()
