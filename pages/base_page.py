@@ -1,47 +1,64 @@
-from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-from locators.base_page_locators import BasePageLocators
+from selenium.webdriver.support import expected_conditions
 import urls
 
-
 class BasePage:
-
 
     def __init__(self, driver):
         self.driver = driver
 
-    def click_scooter_logo(self):
-        self.driver.find_element(*BasePageLocators.SCOOTER_LOGO).click()
+    def open_main_page(self):
+        self.driver.get(urls.MAIN_URL)
 
-    def wait_for_load_main_scooter_page(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.url_to_be(urls.MAIN_URL))
-    
-    def go_to_main_scooter_page(self):
-        self.click_scooter_logo()
-        self.wait_for_load_main_scooter_page()
-        return self.get_current_url()
+    def find_element(self, locator):
+        return self.driver.find_element(*locator)
+
+    def find_elements(self, locator):
+        return self.driver.find_elements(*locator)
+
+    def click_on_element(self, locator):
+        self.find_element(locator).click()
+
+    def scroll_to_element(self, locator):
+        element = self.find_element(locator)
+        self.driver.execute_script('arguments[0].scrollIntoView({block: "center"});', element)
+
+    def wait_visibility_of_element(self, element):
+        return WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of(element))
+
+    def find_element_from_list(self, locator, index):
+        elements = self.find_elements(locator)
+        return elements[index]
+
+    def click_on_web_element(self, element):
+        element.click()
+
+    def get_text_from_element(self, element):
+        return element.text
 
 
 
-    def click_yandex_logo(self):
-        self.driver.find_element(*BasePageLocators.YANDEX_LOGO).click()
+    def wait_for_url_contains_path(self, path):
+        return WebDriverWait(self.driver, 3).until(expected_conditions.url_contains(path))
 
-    def wait_for_new_tab_to_appear(self):
-        WebDriverWait(self.driver, 5).until(expected_conditions.number_of_windows_to_be(2))
+    def wait_for_visibility_of_element_located(self, locator):
+        return WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(locator))
 
-    def switch_to_new_tab(self):
-        self.driver.switch_to.window(self.driver.window_handles[-1])
+    def put_value(self, locator, value):
+        self.find_element(locator).send_keys(value)
 
-    def wait_for_load_dzen_page(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.url_contains(urls.DZEN_DOMAIN))
-
-    def go_to_dzen_new_tab(self):
-        self.click_yandex_logo()
-        self.wait_for_new_tab_to_appear()
-        self.switch_to_new_tab()
-        self.wait_for_load_dzen_page()
-        return self.get_current_url()
-    
+    def wait_for_url_to_be(self, url):
+        return WebDriverWait(self.driver, 3).until(expected_conditions.url_to_be(url))
 
     def get_current_url(self):
         return self.driver.current_url
+
+
+
+    def wait_for_new_window(self):
+        return WebDriverWait(self.driver, 5).until(expected_conditions.number_of_windows_to_be(2))
+
+    def switch_to_new_window(self):
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+
+    
